@@ -145,6 +145,23 @@ This project utilizes a highly professional decoupled architecture separated int
 - [cite_start]**Machine Learning (The Brain):** Model training utilizing Scikit-Learn, comparing a Logistic Regression baseline against an advanced Random Forest Classifier[cite: 768].
 - [cite_start]**Web Deployment (The Interface):** A dual-frontend approach featuring a Flask REST API, a Streamlit application for academic EDA presentation, and a custom Full-Stack dashboard using HTML, Tailwind CSS, and vanilla JS (with Chart.js) for public portfolio demonstration[cite: 770].
 
+## 📸 Visual Project Showcase
+
+### 1. Custom Full-Stack Web Dashboard (Flask + JS)
+
+_A production-grade interface allowing users to input transaction data and receive millisecond risk assessments from the isolated ML model._
+![Flask Portfolio Dashboard](assets/home.gpeg)(assets/dash.jpeg)(asests/analytics.jpeg)(assets/about.jpeg)
+
+### 2. Academic Presentation UI (Streamlit)
+
+_An interactive dashboard designed for data scientists to test the model and view feature correlations._
+![Streamlit Academic Dashboard](assets/streamlit.png)
+
+### 3. Exploratory Data Analysis (EDA)
+
+_Database-driven visualizations highlighting the severe 0.17% class imbalance and transaction distributions._
+![EDA Charts](assets/Figure_11.png)
+
 ## 📊 Dataset & Modeling
 
 [cite_start]The system was trained on the highly imbalanced Kaggle ULB Credit Card Fraud dataset, which contains 284,807 total transactions but only 492 actual frauds[cite: 766].
