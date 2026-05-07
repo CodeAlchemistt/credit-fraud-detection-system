@@ -147,19 +147,36 @@ This project utilizes a highly professional decoupled architecture separated int
 
 ## 📸 Visual Project Showcase
 
-### 1. Custom Full-Stack Web Dashboard (Flask + JS)
+## 📸 Visual Project Showcase
 
-_A production-grade interface allowing users to input transaction data and receive millisecond risk assessments from the isolated ML model._
-![Flask Portfolio Dashboard](assets/home.gpeg)(assets/dash.jpeg)(asests/analytics.jpeg)(assets/about.jpeg)
+### 1. Custom Full-Stack Web Application ("Tritiya")
+
+_A production-grade portfolio interface featuring real-time transaction simulation, database analytics, and an integrated developer profile._
+
+**System Overview & Metrics**
+![Tritiya Homepage](assets/portfolio-app.jpeg)
+
+**Live Transaction Dashboard**
+![Transaction Dashboard](assets/dash.jpeg)
+
+**Data Science Analytics**
+![Analytics & Methodology](assets/analytics.jpeg)
+
+**Developer Profile**
+![About the Developer](assets/about.jpeg)
+
+---
 
 ### 2. Academic Presentation UI (Streamlit)
 
-_An interactive dashboard designed for data scientists to test the model and view feature correlations._
+_An interactive dashboard designed for academic defense, allowing instructors to test the isolated Random Forest model using real-world scenarios._
 ![Streamlit Academic Dashboard](assets/streamlit.png)
+
+---
 
 ### 3. Exploratory Data Analysis (EDA)
 
-_Database-driven visualizations highlighting the severe 0.17% class imbalance and transaction distributions._
+_Backend-generated Matplotlib visualizations highlighting the severe 0.17% class imbalance and feature distributions._
 ![EDA Charts](assets/Figure_11.png)
 
 ## 📊 Dataset & Modeling
