@@ -1,0 +1,12 @@
+# Datasets (Too large for GitHub)
+data/
+*.csv
+
+# Python Environments & Cache
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Mac/System files
+.DS_Store

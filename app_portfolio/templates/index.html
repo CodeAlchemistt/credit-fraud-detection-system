@@ -1,0 +1,400 @@
+{% extends "base.html" %}
+{% block title %}Tritiya — Next-Gen Fraud Detection{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Hero grid background ── */
+  .hero-bg {
+    background-color: #040d1a;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(21,55,104,.6) 0%, transparent 60%),
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: auto, 40px 40px, 40px 40px;
+  }
+
+  /* ── Animated counter ── */
+  .counter { font-variant-numeric: tabular-nums; }
+
+  /* ── Tech badge ── */
+  .tech-badge {
+    border: 1px solid rgba(21,55,104,.7);
+    background: rgba(7,20,40,.8);
+    backdrop-filter: blur(8px);
+  }
+
+  /* ── Stagger animation ── */
+  .stagger > * { opacity:0; animation: fadeUp .55s ease forwards; }
+  .stagger > *:nth-child(1) { animation-delay:.1s; }
+  .stagger > *:nth-child(2) { animation-delay:.22s; }
+  .stagger > *:nth-child(3) { animation-delay:.34s; }
+  .stagger > *:nth-child(4) { animation-delay:.46s; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── Floating badge animation ── */
+  @keyframes floatY {
+    0%,100%{ transform:translateY(0); }
+    50%    { transform:translateY(-8px); }
+  }
+  .float { animation: floatY 4s ease-in-out infinite; }
+
+  /* ── Hero accent line ── */
+  .accent-line {
+    background: linear-gradient(90deg, #fbbf24, #ef4444);
+    height:3px; border-radius:2px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO SECTION
+══════════════════════════════════════════════════════════ -->
+<section class="hero-bg relative min-h-screen flex items-center pt-20 scanlines overflow-hidden">
+
+  <!-- Decorative blur blobs -->
+  <div class="absolute top-1/3 right-0 w-96 h-96 bg-navy-600/20 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 left-1/4 w-64 h-64 bg-crime-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12 w-full">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+
+      <!-- ── Left: headline ── -->
+      <div class="stagger">
+        <!-- Label pill -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full
+                    border border-gold-400/30 bg-gold-400/10 text-gold-400
+                    text-xs font-display tracking-widest uppercase mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse"></span>
+          Live System · Academy Final Project
+        </div>
+
+        <h1 class="font-display text-5xl md:text-6xl lg:text-7xl leading-none tracking-tight mb-2">
+          Next-Gen<br/>
+          <span class="text-transparent bg-clip-text
+                       bg-gradient-to-r from-gold-400 to-crime-400">
+            Fraud Detection
+          </span>
+        </h1>
+
+        <div class="accent-line w-20 my-6"></div>
+
+        <p class="text-slate-300 text-lg leading-relaxed max-w-md">
+          A machine-learning system that analyses credit-card transactions in real time,
+          flagging anomalous patterns with <strong class="text-white">99.94 % accuracy</strong>
+          — trained on 284,807 real-world transactions.
+        </p>
+
+        <!-- CTA row -->
+        <div class="flex flex-wrap gap-4 mt-8">
+          <a href="/dashboard"
+             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg
+                    bg-gold-400 text-navy-950 font-display text-sm tracking-wide
+                    hover:bg-gold-300 transition-all hover:shadow-lg hover:shadow-gold-400/20">
+            Launch Dashboard
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+          </a>
+          <a href="/analytics"
+             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg
+                    border border-navy-600 text-slate-300
+                    hover:border-slate-400 hover:text-white transition-all">
+            View Analytics
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Right: mock transaction card ── -->
+      <div class="relative flex justify-center items-center float">
+        <!-- Outer glow ring -->
+        <div class="absolute w-72 h-72 rounded-full border border-navy-600/40 animate-pulse-slow"></div>
+        <div class="absolute w-56 h-56 rounded-full border border-navy-600/30"></div>
+
+        <!-- Card -->
+        <div class="relative w-80 rounded-2xl p-6 glow-border bg-navy-900/80 backdrop-blur">
+          <!-- Card header -->
+          <div class="flex items-center justify-between mb-6">
+            <span class="font-display text-xs tracking-widest text-slate-400 uppercase">Transaction</span>
+            <span class="px-2 py-0.5 rounded text-xs font-display bg-crime-500/20 text-crime-400
+                         border border-crime-500/30 animate-pulse">● BLOCKED</span>
+          </div>
+
+          <!-- Amount -->
+          <p class="font-display text-4xl text-white mb-1">$2,847.00</p>
+          <p class="text-slate-400 text-sm mb-6">MerchantID · Online · 02:14 AM UTC</p>
+
+          <!-- Feature bars -->
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Risk Score</span><span class="text-crime-400 font-display">91 / 100</span>
+              </div>
+              <div class="h-1.5 rounded-full bg-navy-700">
+                <div class="h-full rounded-full bg-gradient-to-r from-gold-400 to-crime-500" style="width:91%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Velocity Anomaly</span><span class="text-gold-400 font-display">HIGH</span>
+              </div>
+              <div class="h-1.5 rounded-full bg-navy-700">
+                <div class="h-full rounded-full bg-gold-400" style="width:74%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Geo-pattern</span><span class="text-crime-400 font-display">MISMATCH</span>
+              </div>
+              <div class="h-1.5 rounded-full bg-navy-700">
+                <div class="h-full rounded-full bg-crime-500" style="width:88%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="mt-6 pt-4 border-t border-navy-700 flex items-center gap-2 text-xs text-slate-500">
+            <svg class="w-4 h-4 text-crime-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71
+                       c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                       0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+            </svg>
+            Flagged by ML engine · Model v2.1
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-500 text-xs animate-bounce">
+    <span>Scroll</span>
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+    </svg>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STATS ROW
+══════════════════════════════════════════════════════════ -->
+<section class="bg-navy-900 border-y border-navy-700">
+  <div class="max-w-6xl mx-auto px-6 md:px-12 py-10
+              grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+
+    <div>
+      <p class="font-display text-4xl text-white counter" data-target="284807">0</p>
+      <p class="text-slate-400 text-sm mt-1">Transactions Analysed</p>
+    </div>
+    <div>
+      <p class="font-display text-4xl text-crime-400 counter" data-target="492">0</p>
+      <p class="text-slate-400 text-sm mt-1">Fraud Cases Detected</p>
+    </div>
+    <div>
+      <p class="font-display text-4xl text-safe-400">99.94<span class="text-2xl">%</span></p>
+      <p class="text-slate-400 text-sm mt-1">Model Accuracy</p>
+    </div>
+    <div>
+      <p class="font-display text-4xl text-gold-400">0.98</p>
+      <p class="text-slate-400 text-sm mt-1">AUC-ROC Score</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════════════════════════ -->
+<section class="py-24 px-6 md:px-12 bg-navy-950">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-16">
+      <p class="text-gold-400 text-xs font-display tracking-widest uppercase mb-3">System Overview</p>
+      <h2 class="font-display text-4xl md:text-5xl text-white">How It Works</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Step 1 -->
+      <div class="card-lift rounded-2xl p-8 bg-navy-900 border border-navy-700">
+        <div class="w-12 h-12 rounded-xl bg-gold-400/10 border border-gold-400/30
+                    flex items-center justify-center mb-6">
+          <svg class="w-6 h-6 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026
+                     m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0
+                     002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25
+                     2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879
+                     a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25
+                     2.25 0 0120.25 9v.776"/>
+          </svg>
+        </div>
+        <span class="text-xs text-slate-500 font-display tracking-widest uppercase">Step 01</span>
+        <h3 class="font-display text-xl text-white mt-2 mb-3">Data Ingestion</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Transaction data enters the pipeline. PCA-reduced features (V1–V28),
+          transaction amount, and time are extracted from the Kaggle dataset
+          and stored in MySQL.
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="card-lift rounded-2xl p-8 bg-navy-900 border border-navy-700">
+        <div class="w-12 h-12 rounded-xl bg-crime-500/10 border border-crime-500/30
+                    flex items-center justify-center mb-6">
+          <svg class="w-6 h-6 text-crime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591
+                     L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082
+                     a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659
+                     1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8
+                     15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0
+                     00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65
+                     3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773
+                     0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61
+                     L5 14.5"/>
+          </svg>
+        </div>
+        <span class="text-xs text-slate-500 font-display tracking-widest uppercase">Step 02</span>
+        <h3 class="font-display text-xl text-white mt-2 mb-3">ML Inference</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Features are scaled with RobustScaler and fed to a trained classifier.
+          SMOTE oversampling addresses the 0.17 % class imbalance during training.
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="card-lift rounded-2xl p-8 bg-navy-900 border border-navy-700">
+        <div class="w-12 h-12 rounded-xl bg-safe-500/10 border border-safe-500/30
+                    flex items-center justify-center mb-6">
+          <svg class="w-6 h-6 text-safe-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12
+                     c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0
+                     01-1.043 3.296 3.745 3.745 0 01-3.296 1.043
+                     A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593
+                     a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0
+                     01-1.043-3.296A3.745 3.745 0 013 12
+                     c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0
+                     011.043-3.296 3.745 3.745 0 013.296-1.043
+                     A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593
+                     a3.746 3.746 0 013.296 1.043 3.745 3.745 0
+                     011.043 3.296A3.745 3.745 0 0121 12z"/>
+          </svg>
+        </div>
+        <span class="text-xs text-slate-500 font-display tracking-widest uppercase">Step 03</span>
+        <h3 class="font-display text-xl text-white mt-2 mb-3">Real-Time Decision</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          The model returns a fraud probability score. Transactions above the
+          threshold are flagged as <span class="text-crime-400">BLOCKED</span>;
+          clean ones as <span class="text-safe-400">APPROVED</span>.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     TECH STACK
+══════════════════════════════════════════════════════════ -->
+<section class="py-24 px-6 md:px-12 bg-navy-900">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-16">
+      <p class="text-gold-400 text-xs font-display tracking-widest uppercase mb-3">Built With</p>
+      <h2 class="font-display text-4xl md:text-5xl text-white">The Tech Stack</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+
+      {% set stack = [
+        ("Python 3.11", "Core language for data processing and ML training.", "🐍", "text-safe-400"),
+        ("Pandas / NumPy", "Data wrangling, feature engineering, and matrix ops.", "🔢", "text-gold-400"),
+        ("Scikit-learn", "Model training, SMOTE oversampling, RobustScaler.", "🤖", "text-blue-400"),
+        ("MySQL", "Transactional database for storing flagged records.", "🗄️", "text-orange-400"),
+        ("Flask", "Lightweight Python web framework and REST API.", "⚡", "text-crime-400"),
+        ("Matplotlib / Seaborn", "EDA visualisations and model evaluation charts.", "📊", "text-purple-400"),
+        ("Tailwind CSS", "Utility-first CSS for this responsive interface.", "🎨", "text-cyan-400"),
+        ("Kaggle Dataset", "284,807 real European card transactions (2013).", "📦", "text-pink-400"),
+      ] %}
+
+      {% for name, desc, emoji, color in stack %}
+      <div class="tech-badge card-lift rounded-2xl p-6">
+        <div class="text-3xl mb-4">{{ emoji }}</div>
+        <h3 class="font-display text-sm {{ color }} mb-2">{{ name }}</h3>
+        <p class="text-slate-400 text-xs leading-relaxed">{{ desc }}</p>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     FINAL CTA
+══════════════════════════════════════════════════════════ -->
+<section class="py-32 px-6 text-center relative overflow-hidden bg-navy-950">
+  <div class="absolute inset-0 pointer-events-none"
+       style="background:radial-gradient(ellipse 60% 60% at 50% 50%, rgba(21,55,104,.35) 0%, transparent 70%)"></div>
+  <div class="relative z-10 max-w-2xl mx-auto">
+    <h2 class="font-display text-4xl md:text-5xl text-white mb-6">
+      Ready to see it in action?
+    </h2>
+    <p class="text-slate-400 text-lg mb-10">
+      Submit a simulated transaction on the live dashboard and watch the ML engine
+      decide in under a second.
+    </p>
+    <a href="/dashboard"
+       class="inline-flex items-center gap-3 px-8 py-4 rounded-xl
+              bg-gold-400 text-navy-950 font-display text-lg tracking-wide
+              hover:bg-gold-300 transition-all hover:shadow-xl hover:shadow-gold-400/25">
+      Open the Dashboard
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // ── Animated counters ──
+  function animateCounter(el) {
+    const target = +el.dataset.target;
+    const duration = 1800;
+    const start = performance.now();
+    const tick = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(ease * target).toLocaleString();
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCounter(e.target);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll(".counter").forEach(el => io.observe(el));
+</script>
+{% endblock %}
