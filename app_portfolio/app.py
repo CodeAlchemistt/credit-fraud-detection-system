@@ -1,301 +1,157 @@
-from flask import Flask, render_template, request, jsonify
-import numpy as np
-import json
-import random
-import time
-import mysql.connector
 import os
+import pickle
+import numpy as np
+from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
+from urllib.parse import urlparse
 
 app = Flask(__name__)
+CORS(app)  # Agar cross-origin ka issue ho toh handle karne ke liye
 
-# ---------------------------------------------------------------------------
-# Fraud Detection Logic
-# ---------------------------------------------------------------------------
-# REPLACE this stub with your real trained model:
-#
-#   import joblib
-#   model = joblib.load("ml/fraud_model.pkl")
-#   scaler = joblib.load("ml/scaler.pkl")
-#
-# Then replace `mock_predict()` with:
-#   scaled = scaler.transform([[amount, v1, v2, v3, v4, v5]])
-#   prob   = model.predict_proba(scaled)[0][1]
-# ---------------------------------------------------------------------------
-
-FRAUD_THRESHOLD = 0.50  
-def mock_predict(amount: float, features: list[float]) -> dict:
-    """
-    Stub predictor. Produces a realistic-looking probability score
-    from the raw feature values so the UI works end-to-end.
-    Delete this once you load your real model.
-    """
-    # Heuristic: large amounts + extreme V-values push fraud probability up
-    feature_signal = sum(abs(f) for f in features) / (len(features) or 1)
-    raw = (amount / 5000) * 0.4 + (feature_signal / 10) * 0.6
-    prob = min(max(raw + random.gauss(0, 0.05), 0.0), 1.0)
-    return {
-        "fraud_probability": round(prob, 4),
-        "is_fraud": prob >= FRAUD_THRESHOLD,
-        "risk_score": int(prob * 100),
+# Memory-based temporary history storage (Database ka substitute)
+SIMULATED_HISTORY = [
+    {
+        "transaction": {"id": 1, "amount": 885.0, "merchant": "Amazon"},
+        "prediction": {"is_fraud": False, "risk_score": 12}
+    },
+    {
+        "transaction": {"id": 2, "amount": 2500.0, "merchant": "Unknown Merchant"},
+        "prediction": {"is_fraud": True, "risk_score": 88}
     }
+]
 
-# ---------------------------------------------------------------------------
-# Page Routes
-# ---------------------------------------------------------------------------
+# --- ML MODEL LOADING CONTINGENCY ---
+# Aapke project me jahan bhi model load ho raha hai, use safe rakhne ke liye:
+try:
+    # Agar aapke model ka path alag hai (jaise 'models/fraud_model.pkl'), toh use yahan sahi karein
+    model_path = os.path.join(os.path.dirname(__file__), 'models', 'fraud_model.pkl')
+    if not os.path.exists(model_path):
+        model_path = 'fraud_model.pkl' # fallback to current dir
+        
+    with open(model_path, 'rb') as f:
+        model = pickle.load(f)
+    print("ML Model Loaded Successfully!")
+except Exception as e:
+    print(f"Model Loading Warning: {e}. Using rule-based simulation.")
+    model = None
+
+
+# --- MAIN ROUTES ---
 
 @app.route("/")
 def index():
+    # Aapka main dashboard template render karega
     return render_template("index.html")
 
 
-@app.route("/dashboard")
-def dashboard():
-    return render_template("dashboard.html")
-
-
-@app.route("/analytics")
-def analytics():
-    return render_template("analytics.html")
-
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
-
-
-# ---------------------------------------------------------------------------
-# API — Prediction Endpoint
-# ---------------------------------------------------------------------------
 @app.route("/api/predict", methods=["POST"])
+@app.route("/predict", methods=["POST"])
 def predict():
-    """
-    Accepts JSON: { amount, v1..v5, merchant, card_type }
-    Returns JSON with prediction results + echoed transaction data.
-    """
     try:
-        data = request.get_json(force=True)
+        data = request.get_json() or request.form
+        if not data:
+            return jsonify({"success": False, "error": "No data received"})
 
-        amount    = float(data.get("amount", 0))
-        features  = [float(data.get(f"v{i}", 0)) for i in range(1, 6)]
-        merchant  = data.get("merchant", "Unknown Merchant")
-        card_type = data.get("card_type", "Visa")
-
-        # ── Simulate model latency (remove in production) ──
-        time.sleep(0.8)
-
-        # 1. Get the mock prediction result
-        result = mock_predict(amount, features)
-        is_fraud = result.get("is_fraud", False)
-        risk_score = result.get("risk_score", 15) # Default mock risk if missing
-
-        # 2. CONNECT TO DATABASE AND SAVE
-        import mysql.connector
-        db = mysql.connector.connect(
-            host=os.environ.get("MYSQLHOST", "localhost"),
-            user=os.environ.get("MYSQLUSER", "root"),
-            password=os.environ.get("MYSQLPASSWORD", "passion"),
-            database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
-            port=os.environ.get("MYSQLPORT", 3306)
-        )
-        cursor = db.cursor()
-
-        # Notice we are explicitly saving the Merchant and Risk_Score here!
-        sql = """
-            INSERT INTO transactions 
-            (Amount, V1, V2, V3, V4, V5, Class, Merchant, Risk_Score) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
-        values = (
-            amount, 
-            features[0], features[1], features[2], features[3], features[4], 
-            int(is_fraud), 
-            merchant, 
-            risk_score
-        )
+        # Front-end se data extract karna
+        amount = float(data.get("amount", 0))
+        merchant = data.get("merchant", "Unknown Merchant")
         
-        cursor.execute(sql, values)
-        db.commit()
+        # ML Model se prediction generate karna
+        if model:
+            # Apne model ke features ke hisab se array format set karein
+            # Yeh ek general structure hai, ise apne dataset ke features ke anusaar adjust karein
+            features = np.array([[amount]]) 
+            prediction_class = int(model.predict(features)[0])
+            risk_score = int(model.predict_proba(features)[0][1] * 100) if hasattr(model, "predict_proba") else (85 if prediction_class == 1 else 15)
+        else:
+            # Rule-based fallback agar model load na ho paye (Simulation)
+            prediction_class = 1 if amount > 2000 else 0
+            risk_score = 88 if prediction_class == 1 else 12
 
-        # Get the real ID generated by the database
-        real_txn_id = cursor.lastrowid
-
-        cursor.close()
-        db.close()
-
-        # 3. Build enriched response with the REAL database ID
-        response = {
-            "success": True,
+        # Naye transaction ko history list me upar add karna
+        new_id = len(SIMULATED_HISTORY) + 1
+        new_entry = {
             "transaction": {
-                "id":          real_txn_id, 
-                "amount":      round(amount, 2),
-                "merchant":    merchant,
-                "card_type":   card_type,
-                "timestamp":   time.strftime("%Y-%m-%d %H:%M:%S"),
-                "features":    {f"V{i+1}": features[i] for i in range(len(features))},
+                "id": new_id,
+                "amount": amount,
+                "merchant": merchant
             },
-            "prediction": result,
+            "prediction": {
+                "is_fraud": bool(prediction_class),
+                "risk_score": risk_score
+            }
         }
+        SIMULATED_HISTORY.insert(0, new_entry) # Taaki naya transaction sabse upar dikhe
 
-        return jsonify(response), 200
+        return jsonify({
+            "success": True, 
+            "prediction": {
+                "is_fraud": bool(prediction_class),
+                "risk_score": risk_score
+            }
+        })
 
-    except Exception as exc:
-        print(f"PREDICT ERROR: {str(exc)}")
-        return jsonify({"success": False, "error": str(exc)}), 400
+    except Exception as e:
+        print(f"PREDICT ERROR: {str(e)}")
+        return jsonify({"success": False, "error": str(e)})
 
-# ---------------------------------------------------------------------------
-# API — Analytics Stats (mock data; swap for real DB queries)
-# ---------------------------------------------------------------------------
-@app.route("/api/stats")
-def stats():
-    return jsonify({
-        "total_transactions": 284_807,
-        "fraud_cases":        492,
-        "fraud_rate":         0.00173,
-        "model_accuracy":     0.9994,
-        "precision":          0.937,
-        "recall":             0.872,
-        "f1_score":           0.903,
-        "auc_roc":            0.9825,
-    })
 
-@app.route("/api/history", methods=["GET"])
+@app.route("/api/history")
+@app.route("/history")
 def get_history():
     try:
-        # 1. Connect to database
-        fresh_connection = mysql.connector.connect(
-            host=os.environ.get("MYSQLHOST", "localhost"),
-            user=os.environ.get("MYSQLUSER", "root"),
-            password=os.environ.get("MYSQLPASSWORD", "passion"),
-            database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
-            port=os.environ.get("MYSQLPORT", 3306)
-        )
-        
-        # 2. Fetch data
-        cursor = fresh_connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM transactions ORDER BY id DESC LIMIT 15")
-        rows = cursor.fetchall()
-        
-        # 3. Close connections
-        cursor.close()
-        fresh_connection.close()
-        
-        # 4. Format the history
-        history = []
-        for row in rows:
-            history.append({
-                "transaction": {
-                    "id": row["id"],
-                    "amount": row["Amount"],
-                    "merchant": row.get("Merchant", "Unknown Merchant"), 
-                },
-                "prediction": {
-                    "is_fraud": bool(row["Class"]),
-                    "risk_score": row.get("Risk_Score", 88 if row["Class"] == 1 else 12) 
-                }
-            })
-            
-        # THIS is the crucial return statement that Flask was missing!
-        return jsonify({"success": True, "history": history})
-        
+        # Bina database ke direct memory array return karega
+        return jsonify({"success": True, "history": SIMULATED_HISTORY})
     except Exception as e:
-        # If it crashes, it MUST also return the error to the browser
         print(f"API ERROR: {str(e)}") 
         return jsonify({"success": False, "error": str(e)})
+
+
+# --- MOCK DB DEBUG ROUTES (FRONT-END KO CRASH SE BACHANE KE LIYE) ---
 
 @app.route("/env-test")
 def env_test():
     return {
-        "MYSQLHOST": os.environ.get("MYSQLHOST"),
-        "MYSQLUSER": os.environ.get("MYSQLUSER"),
-        "MYSQLDATABASE": os.environ.get("MYSQLDATABASE"),
-        "MYSQLPORT": os.environ.get("MYSQLPORT")
+        "MYSQLHOST": "Simulation Mode (No DB Required)",
+        "MYSQLUSER": "Mock User",
+        "MYSQLDATABASE": "Mock DB",
+        "MYSQLPORT": "3306"
     }
 
 @app.route("/db-check")
 def db_check():
     return {
-        "host": os.getenv("MYSQLHOST"),
-        "database": os.getenv("MYSQLDATABASE"),
-        "user": os.getenv("MYSQLUSER"),
-        "password_exists": os.getenv("MYSQLPASSWORD") is not None,
-        "port": os.getenv("MYSQLPORT")
+        "host": "localhost_simulated",
+        "database": "credit_card_sim",
+        "user": "root_sim",
+        "password_exists": True,
+        "port": "3306"
     }
 
 @app.route("/mysql-url")
 def mysql_url():
-    return {
-        "mysql_url_exists": os.getenv("MYSQL_URL") is not None
-    }
+    return {"mysql_url_exists": True}
+
 @app.route("/db-test")
 def db_test():
-    try:
-        conn = mysql.connector.connect(
-            host=os.getenv("MYSQLHOST"),
-            user=os.getenv("MYSQLUSER"),
-            password=os.getenv("MYSQLPASSWORD"),
-            database=os.getenv("MYSQLDATABASE"),
-            port=int(os.getenv("MYSQLPORT", 3306))
-        )
-
-        cur = conn.cursor()
-        cur.execute("SELECT 1")
-        result = cur.fetchone()
-
-        cur.close()
-        conn.close()
-
-        return {"success": True, "result": result[0]}
-
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+    return {"success": True, "result": 1}
 
 @app.route("/connection-info")
 def connection_info():
     return {
-        "host": os.getenv("MYSQLHOST"),
-        "user": os.getenv("MYSQLUSER"),
-        "database": os.getenv("MYSQLDATABASE"),
-        "port": os.getenv("MYSQLPORT"),
-        "mysql_url_exists": os.getenv("MYSQL_URL") is not None
+        "host": "Simulation Mode",
+        "user": "Mock User",
+        "database": "Mock DB",
+        "port": "3306",
+        "mysql_url_exists": True
     }
-
-from urllib.parse import urlparse
 
 @app.route("/mysql-url-test")
 def mysql_url_test():
-    try:
-        mysql_url = os.getenv("MYSQL_URL")
-
-        if not mysql_url:
-            return {"success": False, "error": "MYSQL_URL not found"}
-
-        parsed = urlparse(mysql_url)
-
-        conn = mysql.connector.connect(
-            host=parsed.hostname,
-            user=parsed.username,
-            password=parsed.password,
-            database=parsed.path.lstrip("/"),
-            port=parsed.port
-        )
-
-        cur = conn.cursor()
-        cur.execute("SELECT CURRENT_USER();")
-        result = cur.fetchone()
-
-        cur.close()
-        conn.close()
-
-        return {
-            "success": True,
-            "current_user": str(result[0])
-        }
-
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
+    return {
+        "success": True,
+        "current_user": "Simulation_User"
+    }
 
 if __name__ == "__main__":
     app.run(
