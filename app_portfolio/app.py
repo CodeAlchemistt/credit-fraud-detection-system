@@ -91,10 +91,11 @@ def predict():
         # 2. CONNECT TO DATABASE AND SAVE
         import mysql.connector
         db = mysql.connector.connect(
-            host="localhost",
-            user="root",          
-            password="passion",  
-            database="fraud_detection_db"
+            host=os.environ.get("MYSQLHOST", "localhost"),
+            user=os.environ.get("MYSQLUSER", "root"),
+            password=os.environ.get("MYSQLPASSWORD", "passion"),
+            database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
+            port=os.environ.get("MYSQLPORT", 3306)
         )
         cursor = db.cursor()
 
@@ -162,10 +163,11 @@ def get_history():
     try:
         # 1. Connect to database
         fresh_connection = mysql.connector.connect(
-            host="localhost",
-            user="root",          # <-- UPDATE THIS
-            password="passion",  # <-- UPDATE THIS
-            database="fraud_detection_db"
+            host=os.environ.get("MYSQLHOST", "localhost"),
+            user=os.environ.get("MYSQLUSER", "root"),
+            password=os.environ.get("MYSQLPASSWORD", "passion"),
+            database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
+            port=os.environ.get("MYSQLPORT", 3306)
         )
         
         # 2. Fetch data
