@@ -259,12 +259,6 @@ def connection_info():
         "mysql_url_exists": os.getenv("MYSQL_URL") is not None
     }
 
-@app.route("/mysql-url")
-def mysql_url():
-    return {
-        "mysql_url_exists": os.getenv("MYSQL_URL") is not None
-    }
-
 @app.route("/db-test")
 def db_test():
     try:
