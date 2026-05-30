@@ -265,6 +265,35 @@ def mysql_url():
         "mysql_url_exists": os.getenv("MYSQL_URL") is not None
     }
 
+@app.route("/db-test")
+def db_test():
+    try:
+        conn = mysql.connector.connect(
+            host=os.getenv("MYSQLHOST"),
+            user=os.getenv("MYSQLUSER"),
+            password=os.getenv("MYSQLPASSWORD"),
+            database=os.getenv("MYSQLDATABASE"),
+            port=int(os.getenv("MYSQLPORT", "3306"))
+        )
+
+        cursor = conn.cursor()
+        cursor.execute("SELECT CURRENT_USER();")
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return {
+            "success": True,
+            "user": str(result[0])
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
