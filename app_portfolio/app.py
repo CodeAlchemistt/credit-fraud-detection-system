@@ -220,7 +220,13 @@ def db_check():
         "password_exists": os.getenv("MYSQLPASSWORD") is not None,
         "port": os.getenv("MYSQLPORT")
     }
-    
+
+@app.route("/mysql-url")
+def mysql_url():
+    return {
+        "mysql_url_exists": os.getenv("MYSQL_URL") is not None
+    }
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
