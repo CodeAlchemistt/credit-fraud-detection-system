@@ -19,7 +19,7 @@ def create_db_connection(host_name, user_name, user_password, db_name=None):
             host=os.environ.get("MYSQLHOST", "localhost"),
             user=os.environ.get("MYSQLUSER", "root"),
             password=os.environ.get("MYSQLPASSWORD", "passion"), # <-- Safe placeholder!
-            database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
+            database=os.getenv("MYSQLDATABASE", "railway"),
             port=os.environ.get("MYSQLPORT", 3306)
         )
         print("MySQL Database connection successful")
