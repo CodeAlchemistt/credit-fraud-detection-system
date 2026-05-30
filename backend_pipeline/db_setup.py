@@ -9,13 +9,18 @@ def create_db_connection(host_name, user_name, user_password, db_name=None):
     Inputs: host_name, user_name, user_password, db_name (optional)
     Outputs: MySQL connection object
     """
+    import os
+    import mysql.connector
+    from mysql.connector import Error
+
     connection = None
     try:
         connection = mysql.connector.connect(
-            host=host_name,
-            user=user_name,
-            passwd=user_password,
-            database=db_name
+            host=os.environ.get("MYSQLHOST", "localhost"),
+            user=os.environ.get("MYSQLUSER", "root"),
+            password=os.environ.get("MYSQLPASSWORD", "passion"),
+            database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
+            port=os.environ.get("MYSQLPORT", 3306)
         )
         print("MySQL Database connection successful")
     except Error as err:
