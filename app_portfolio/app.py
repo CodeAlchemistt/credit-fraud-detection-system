@@ -217,9 +217,10 @@ def db_check():
         "host": os.getenv("MYSQLHOST"),
         "database": os.getenv("MYSQLDATABASE"),
         "user": os.getenv("MYSQLUSER"),
+        "password_exists": os.getenv("MYSQLPASSWORD") is not None,
         "port": os.getenv("MYSQLPORT")
     }
-
+    
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
