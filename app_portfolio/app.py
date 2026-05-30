@@ -202,6 +202,15 @@ def get_history():
         print(f"API ERROR: {str(e)}") 
         return jsonify({"success": False, "error": str(e)})
 
+@app.route("/env-test")
+def env_test():
+    return {
+        "MYSQLHOST": os.environ.get("MYSQLHOST"),
+        "MYSQLUSER": os.environ.get("MYSQLUSER"),
+        "MYSQLDATABASE": os.environ.get("MYSQLDATABASE"),
+        "MYSQLPORT": os.environ.get("MYSQLPORT")
+    }
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
