@@ -2,29 +2,26 @@ import mysql.connector
 from mysql.connector import Error
 import pandas as pd
 
-def create_db_connection(host_name, user_name, user_password, db_name=None):
-    """
-    Creates a connection to the MySQL database server.
-    
-    Inputs: host_name, user_name, user_password, db_name (optional)
-    Outputs: MySQL connection object
-    """
-    import os
+def create_db_connection(host_name=None, user_name=None, user_password=None, db_name=None):
     import mysql.connector
     from mysql.connector import Error
 
     connection = None
+
     try:
         connection = mysql.connector.connect(
-            host=os.environ.get("MYSQLHOST", "localhost"),
-            user=os.environ.get("MYSQLUSER", "root"),
-            password=os.environ.get("MYSQLPASSWORD", "passion"), # <-- Safe placeholder!
-            database=os.getenv("MYSQLDATABASE", "railway"),
-            port=os.environ.get("MYSQLPORT", 3306)
+            host="zephyr.proxy.rlwy.net",
+            user="root",
+            password="AiGjhoFBkvmmWsngnEMlAADkoQZzAVTW",
+            database="railway",
+            port=51784
         )
+
         print("MySQL Database connection successful")
+
     except Error as err:
         print(f"Error: '{err}'")
+
     return connection
 
 def setup_schema(connection):
@@ -80,33 +77,32 @@ def insert_data_in_batches(connection, csv_path, batch_size=10000):
     
     print("Data ingestion complete.")
 
-   
 if __name__ == "__main__":
-    # 1. Set your credentials here!
-    DB_HOST = "localhost"
-    DB_USER = "root"
-    DB_PASSWORD = "passion"
-    DB_NAME = "fraud_detection_db"
+    import os
+
     CSV_FILE_PATH = "data/creditcard.csv"
-    # 2. Connect to the main MySQL server
+
     print("Connecting to MySQL...")
-    connection = create_db_connection(DB_HOST, DB_USER, DB_PASSWORD)
-    
+
+    connection = create_db_connection(None, None, None)
+
     if connection:
-        cursor = connection.cursor()
-        
-        # 3. Create the database if it doesn't exist and select it
-        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
-        cursor.execute(f"USE {DB_NAME}")
-        print(f"Using database: {DB_NAME}")
-        
-        # 4. Run the AI's functions to create the table and load the data
+        print(
+            f"Using database: {os.getenv('MYSQLDATABASE', 'railway')}"
+        )
+
+        # Create the transactions table
         setup_schema(connection)
-        
+
         print("Starting data insertion. This might take a few minutes...")
-        insert_data_in_batches(connection, CSV_FILE_PATH, batch_size=10000)
-        
-        # 5. Clean up
-        cursor.close()
+        insert_data_in_batches(
+            connection,
+            CSV_FILE_PATH,
+            batch_size=10000
+        )
+
         connection.close()
         print("Pipeline complete. Connection closed.")
+
+    else:
+        print("Failed to connect to database.")
