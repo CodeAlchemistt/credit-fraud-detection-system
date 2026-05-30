@@ -248,7 +248,17 @@ def db_test():
 
     except Exception as e:
         return {"success": False, "error": str(e)}
-        
+
+@app.route("/connection-info")
+def connection_info():
+    return {
+        "host": os.getenv("MYSQLHOST"),
+        "user": os.getenv("MYSQLUSER"),
+        "database": os.getenv("MYSQLDATABASE"),
+        "port": os.getenv("MYSQLPORT"),
+        "mysql_url_exists": os.getenv("MYSQL_URL") is not None
+    }
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
