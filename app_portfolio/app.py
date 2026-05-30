@@ -216,6 +216,7 @@ def db_check():
     return {
         "host": os.getenv("MYSQLHOST"),
         "database": os.getenv("MYSQLDATABASE"),
+        "user": os.getenv("MYSQLUSER"),
         "port": os.getenv("MYSQLPORT")
     }
 
