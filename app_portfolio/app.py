@@ -211,6 +211,14 @@ def env_test():
         "MYSQLPORT": os.environ.get("MYSQLPORT")
     }
 
+@app.route("/db-check")
+def db_check():
+    return {
+        "host": os.getenv("MYSQLHOST"),
+        "database": os.getenv("MYSQLDATABASE"),
+        "port": os.getenv("MYSQLPORT")
+    }
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
