@@ -18,7 +18,7 @@ def create_db_connection(host_name, user_name, user_password, db_name=None):
         connection = mysql.connector.connect(
             host=os.environ.get("MYSQLHOST", "localhost"),
             user=os.environ.get("MYSQLUSER", "root"),
-            password=os.environ.get("MYSQLPASSWORD", "passion"),
+            password=os.environ.get("MYSQLPASSWORD", "YOUR_LOCAL_PASSWORD"), # <-- Safe placeholder!
             database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
             port=os.environ.get("MYSQLPORT", 3306)
         )
