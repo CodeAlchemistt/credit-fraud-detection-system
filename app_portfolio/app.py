@@ -259,6 +259,44 @@ def connection_info():
         "mysql_url_exists": os.getenv("MYSQL_URL") is not None
     }
 
+from urllib.parse import urlparse
+
+@app.route("/mysql-url-test")
+def mysql_url_test():
+    try:
+        mysql_url = os.getenv("MYSQL_URL")
+
+        if not mysql_url:
+            return {"success": False, "error": "MYSQL_URL not found"}
+
+        parsed = urlparse(mysql_url)
+
+        conn = mysql.connector.connect(
+            host=parsed.hostname,
+            user=parsed.username,
+            password=parsed.password,
+            database=parsed.path.lstrip("/"),
+            port=parsed.port
+        )
+
+        cur = conn.cursor()
+        cur.execute("SELECT CURRENT_USER();")
+        result = cur.fetchone()
+
+        cur.close()
+        conn.close()
+
+        return {
+            "success": True,
+            "current_user": str(result[0])
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
