@@ -297,6 +297,51 @@ def mysql_url_test():
             "error": str(e)
         }
 
+@app.route("/fix-schema")
+def fix_schema():
+    try:
+        conn = mysql.connector.connect(
+            host=os.getenv("MYSQLHOST"),
+            user=os.getenv("MYSQLUSER"),
+            password=os.getenv("MYSQLPASSWORD"),
+            database=os.getenv("MYSQLDATABASE"),
+            port=int(os.getenv("MYSQLPORT", 3306))
+        )
+
+        cur = conn.cursor()
+
+        try:
+            cur.execute("""
+                ALTER TABLE transactions
+                ADD COLUMN Merchant VARCHAR(255)
+            """)
+        except:
+            pass
+
+        try:
+            cur.execute("""
+                ALTER TABLE transactions
+                ADD COLUMN Risk_Score INT
+            """)
+        except:
+            pass
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return {
+            "success": True,
+            "message": "Schema updated"
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",

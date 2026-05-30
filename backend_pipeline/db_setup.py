@@ -52,7 +52,7 @@ def setup_schema(connection):
     except Error as err:
         print(f"Error: '{err}'")
 
-def insert_data_in_batches(connection, csv_path, batch_size=10000):
+def insert_data_in_batches(connection, csv_path, batch_size=5000):
     """
     Reads the CSV in chunks and inserts it into MySQL to handle large files efficiently.
     
@@ -72,10 +72,10 @@ def insert_data_in_batches(connection, csv_path, batch_size=10000):
         try:
             cursor.executemany(insert_query, data)
             connection.commit()
+            print(f"Inserted {len(data)} rows")
         except Error as err:
-            print(f"Error inserting batch: '{err}'")
-    
-    print("Data ingestion complete.")
+                           print(f"Error inserting batch: '{err}'")
+                           print("Data ingestion complete.")
 
 if __name__ == "__main__":
     import os
