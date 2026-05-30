@@ -126,13 +126,6 @@ Then replace the placeholder `<div class="chart-placeholder">` in
 
 ---
 
-## 🌐 Deployment (Render / Railway / Heroku)
-
-1. Add a `Procfile`: `web: gunicorn app:app`
-2. `pip install gunicorn` → add to `requirements.txt`
-3. Set `DEBUG=False` in `app.py` for production
-4. Push to GitHub and connect to your platform of choice
-
 # 🛡️ Credit Card Fraud Detection System
 
 An end-to-end, decoupled machine learning pipeline and full-stack web application built to detect fraudulent financial transactions.
@@ -151,16 +144,16 @@ This project utilizes a highly professional decoupled architecture separated int
 
 ### 1. Custom Full-Stack Web Application ("Tritiya")
 
-_A production-grade portfolio interface featuring real-time transaction simulation, database analytics, and an integrated developer profile._
+A production-grade interface allowing users to input transaction data and receive millisecond risk assessments from the isolated ML model.
 
-**System Overview & Metrics**
-![Tritiya Homepage](assets/portfolio-app.jpeg)
+**System Overview**
+![Flask Portfolio Dashboard](assets/portfolio-app.jpeg)
 
 **Live Transaction Dashboard**
 ![Transaction Dashboard](assets/dash.jpeg)
 
-**Data Science Analytics**
-![Analytics & Methodology](assets/analytics.jpeg)
+**Analytics & Methodology**
+![Data Science Analytics](assets/analytics.jpeg)
 
 **Developer Profile**
 ![About the Developer](assets/about.jpeg)
