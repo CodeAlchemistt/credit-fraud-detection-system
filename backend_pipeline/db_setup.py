@@ -18,7 +18,7 @@ def create_db_connection(host_name, user_name, user_password, db_name=None):
         connection = mysql.connector.connect(
             host=os.environ.get("MYSQLHOST", "localhost"),
             user=os.environ.get("MYSQLUSER", "root"),
-            password=os.environ.get("MYSQLPASSWORD", "YOUR_LOCAL_PASSWORD"), # <-- Safe placeholder!
+            password=os.environ.get("MYSQLPASSWORD", "passion"), # <-- Safe placeholder!
             database=os.environ.get("MYSQLDATABASE", "fraud_detection_db"),
             port=os.environ.get("MYSQLPORT", 3306)
         )
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     DB_USER = "root"
     DB_PASSWORD = "passion"
     DB_NAME = "fraud_detection_db"
-    CSV_FILE_PATH = "creditcard.csv"
+    CSV_FILE_PATH = "data/creditcard.csv"
     # 2. Connect to the main MySQL server
     print("Connecting to MySQL...")
     connection = create_db_connection(DB_HOST, DB_USER, DB_PASSWORD)
