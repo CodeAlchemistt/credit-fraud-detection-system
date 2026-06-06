@@ -4,39 +4,46 @@
 {% block head %}
 <style>
   .analytics-bg {
-    background-color:#040d1a;
+    background-color: #040d1a;
     background-image:
-      radial-gradient(ellipse 70% 40% at 80% 10%, rgba(21,55,104,.3) 0%, transparent 60%),
-      linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      radial-gradient(ellipse 70% 40% at 80% 10%, rgba(21, 55, 104, .3) 0%, transparent 60%),
+      linear-gradient(rgba(255, 255, 255, .018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, .018) 1px, transparent 1px);
     background-size: auto, 40px 40px, 40px 40px;
   }
 
   /* ── Chart placeholder ── */
   .chart-placeholder {
-    min-height:260px;
-    background: repeating-linear-gradient(
-      -45deg, rgba(16,43,86,.3) 0px, rgba(16,43,86,.3) 1px,
-      transparent 1px, transparent 10px);
-    border-radius:.75rem;
-    display:flex; align-items:center; justify-content:center;
-    flex-direction:column; gap:.75rem;
+    min-height: 260px;
+    background: repeating-linear-gradient(-45deg, rgba(16, 43, 86, .3) 0px, rgba(16, 43, 86, .3) 1px,
+        transparent 1px, transparent 10px);
+    border-radius: .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: .75rem;
   }
 
   /* ── Timeline dot ── */
   .timeline-dot::before {
-    content:"";
-    position:absolute; left:-1.35rem; top:.35rem;
-    width:.6rem; height:.6rem;
-    border-radius:50%; background:#fbbf24;
-    box-shadow:0 0 0 3px rgba(251,191,36,.2);
+    content: "";
+    position: absolute;
+    left: -1.35rem;
+    top: .35rem;
+    width: .6rem;
+    height: .6rem;
+    border-radius: 50%;
+    background: #fbbf24;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, .2);
   }
 
   /* ── Metric card ── */
   .metric-card {
-    background: rgba(7,20,40,.8);
-    border:1px solid rgba(16,43,86,.8);
-    border-radius:1rem; padding:1.5rem;
+    background: rgba(7, 20, 40, .8);
+    border: 1px solid rgba(16, 43, 86, .8);
+    border-radius: 1rem;
+    padding: 1.5rem;
   }
 </style>
 {% endblock %}
@@ -88,7 +95,7 @@
         <p>
           The dataset is sourced from the
           <a href="https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud" target="_blank"
-             class="text-gold-400 underline underline-offset-2 hover:text-gold-300">
+            class="text-gold-400 underline underline-offset-2 hover:text-gold-300">
             ULB Machine Learning Group on Kaggle
           </a>. Due to confidentiality, the original features have been transformed
           via <strong class="text-white">Principal Component Analysis (PCA)</strong>,
@@ -128,7 +135,8 @@
         </div>
 
         <!-- Explanation -->
-        <div class="rounded-2xl bg-navy-900 border border-navy-700 p-6 space-y-4 text-sm text-slate-300 leading-relaxed">
+        <div
+          class="rounded-2xl bg-navy-900 border border-navy-700 p-6 space-y-4 text-sm text-slate-300 leading-relaxed">
           <h3 class="font-display text-lg text-white">Why This Matters</h3>
           <p>
             A naive classifier that labels <em>every</em> transaction as legitimate would achieve
@@ -138,13 +146,13 @@
           </p>
           <p>
             To counteract this, <strong class="text-white">SMOTE (Synthetic Minority
-            Over-sampling Technique)</strong> was applied to the training set, generating
+              Over-sampling Technique)</strong> was applied to the training set, generating
             synthetic minority-class examples so the model learns discriminative boundaries
             for both classes equally.
           </p>
           <p>
             Evaluation focused on <strong class="text-gold-400">Precision, Recall, F1,
-            and AUC-ROC</strong> rather than raw accuracy.
+              and AUC-ROC</strong> rather than raw accuracy.
           </p>
         </div>
 
@@ -172,8 +180,7 @@
           <!-- ↓ Replace this canvas with your Matplotlib figure or embed Chart.js -->
           <div class="chart-placeholder">
             <svg class="w-10 h-10 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621
                        0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21
                        6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75z
                        M9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25
@@ -183,13 +190,13 @@
                        M16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25
                        C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504
                        1.125-1.125 1.125h-2.25a1.125 1.125 0
-                       01-1.125-1.125V4.125z"/>
+                       01-1.125-1.125V4.125z" />
             </svg>
             <p class="text-slate-600 text-xs font-display tracking-wide">
               EMBED MATPLOTLIB CHART HERE
             </p>
             <p class="text-slate-700 text-xs">
-              e.g. <code>static/img/amount_dist.png</code>
+              <code>static/img/Figure_1.png</code>
             </p>
           </div>
         </div>
@@ -201,12 +208,11 @@
           </p>
           <div class="chart-placeholder">
             <svg class="w-10 h-10 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25
                        c.621 0 1.125-.504 1.125-1.125V4.875
                        C21 4.254 20.496 3.75 19.875 3.75H4.125
                        C3.504 3.75 3 4.254 3 4.875v11.25
-                       c0 .621.504 1.125 1.125 1.125z"/>
+                       c0 .621.504 1.125 1.125 1.125z" />
             </svg>
             <p class="text-slate-600 text-xs font-display tracking-wide">
               EMBED SEABORN HEATMAP HERE
@@ -245,14 +251,14 @@
       <!-- Metrics grid -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
         {% set metrics = [
-          ("Accuracy",  "99.94 %", "text-white"),
-          ("Precision", "93.7 %",  "text-gold-400"),
-          ("Recall",    "87.2 %",  "text-blue-400"),
-          ("F1 Score",  "90.3 %",  "text-safe-400"),
-          ("AUC-ROC",   "0.9825",  "text-purple-400"),
-          ("False +ve", "0.06 %",  "text-gold-400"),
-          ("False -ve", "12.8 %",  "text-crime-400"),
-          ("Threshold", "0.50",    "text-slate-300"),
+        ("Accuracy", "99.94 %", "text-white"),
+        ("Precision", "93.7 %", "text-gold-400"),
+        ("Recall", "87.2 %", "text-blue-400"),
+        ("F1 Score", "90.3 %", "text-safe-400"),
+        ("AUC-ROC", "0.9825", "text-purple-400"),
+        ("False +ve", "0.06 %", "text-gold-400"),
+        ("False -ve", "12.8 %", "text-crime-400"),
+        ("Threshold", "0.50", "text-slate-300"),
         ] %}
         {% for label, val, color in metrics %}
         <div class="metric-card text-center">
@@ -269,11 +275,10 @@
         </p>
         <div class="chart-placeholder" style="min-height:300px">
           <svg class="w-10 h-10 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9
                      M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0
                      0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0
-                     006 20.25z"/>
+                     006 20.25z" />
           </svg>
           <p class="text-slate-600 text-xs font-display tracking-wide">
             EMBED ROC CURVE MATPLOTLIB FIGURE
@@ -307,12 +312,18 @@
       <div class="relative pl-6 border-l border-navy-700 space-y-10">
 
         {% set steps = [
-          ("Data Exploration", "Loaded the CSV into Pandas. Verified null counts (none), inspected the class distribution, and plotted feature histograms to understand the PCA component ranges."),
-          ("Preprocessing", "Applied RobustScaler to Amount and Time. Split 80/20 train/test with stratification to maintain the fraud ratio. Applied SMOTE only to the training split."),
-          ("Model Training", "Trained and cross-validated: Logistic Regression (baseline), Random Forest, XGBoost, and a tuned gradient-boosted classifier. Evaluated each with F1 and AUC-ROC."),
-          ("Threshold Tuning", "Default 0.5 threshold optimised by inspecting the precision-recall curve. A threshold of 0.50 balanced false positives vs. missed fraud for this use case."),
-          ("Persistence & API", "Best model serialised with joblib. Wrapped in a Flask REST endpoint and integrated with the dashboard."),
-          ("MySQL Integration", "All flagged transactions written to a MySQL table (fraud_log) for audit trails and downstream reporting."),
+        ("Data Exploration", "Loaded the CSV into Pandas. Verified null counts (none), inspected the class distribution,
+        and plotted feature histograms to understand the PCA component ranges."),
+        ("Preprocessing", "Applied RobustScaler to Amount and Time. Split 80/20 train/test with stratification to
+        maintain the fraud ratio. Applied SMOTE only to the training split."),
+        ("Model Training", "Trained and cross-validated: Logistic Regression (baseline), Random Forest, XGBoost, and a
+        tuned gradient-boosted classifier. Evaluated each with F1 and AUC-ROC."),
+        ("Threshold Tuning", "Default 0.5 threshold optimised by inspecting the precision-recall curve. A threshold of
+        0.50 balanced false positives vs. missed fraud for this use case."),
+        ("Persistence & API", "Best model serialised with joblib. Wrapped in a Flask REST endpoint and integrated with
+        the dashboard."),
+        ("MySQL Integration", "All flagged transactions written to a MySQL table (fraud_log) for audit trails and
+        downstream reporting."),
         ] %}
 
         {% for title, desc in steps %}
@@ -331,71 +342,71 @@
 
 {% block scripts %}
 <script>
-// ── Class distribution doughnut ──────────────────────
-new Chart(document.getElementById("classChart"), {
-  type: "doughnut",
-  data: {
-    labels: ["Legitimate (99.83%)", "Fraud (0.17%)"],
-    datasets: [{
-      data: [284315, 492],
-      backgroundColor: ["rgba(34,197,94,.7)", "rgba(239,68,68,.7)"],
-      borderColor:     ["rgba(34,197,94,1)",  "rgba(239,68,68,1)"],
-      borderWidth: 2,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    cutout: "72%",
-    plugins: {
-      legend: {
-        position: "bottom",
-        labels: { color:"#94a3b8", font:{ family:"DM Sans", size:12 }, padding:16 }
-      }
-    }
-  }
-});
-
-// ── Confusion matrix (styled bar chart proxy) ────────
-new Chart(document.getElementById("confusionMatrix"), {
-  type: "bar",
-  data: {
-    labels: ["True Negative", "False Positive", "False Negative", "True Positive"],
-    datasets: [{
-      data: [56856, 35, 14, 97],
-      backgroundColor: [
-        "rgba(34,197,94,.7)", "rgba(251,191,36,.7)",
-        "rgba(251,191,36,.7)", "rgba(34,197,94,.7)"
-      ],
-      borderColor: [
-        "rgba(34,197,94,1)", "rgba(251,191,36,1)",
-        "rgba(251,191,36,1)", "rgba(34,197,94,1)"
-      ],
-      borderWidth: 2,
-      borderRadius: 6,
-    }]
-  },
-  options: {
-    responsive: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: ctx => ` ${ctx.parsed.y.toLocaleString()} transactions`
+  // ── Class distribution doughnut ──────────────────────
+  new Chart(document.getElementById("classChart"), {
+    type: "doughnut",
+    data: {
+      labels: ["Legitimate (99.83%)", "Fraud (0.17%)"],
+      datasets: [{
+        data: [284315, 492],
+        backgroundColor: ["rgba(34,197,94,.7)", "rgba(239,68,68,.7)"],
+        borderColor: ["rgba(34,197,94,1)", "rgba(239,68,68,1)"],
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      cutout: "72%",
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { color: "#94a3b8", font: { family: "DM Sans", size: 12 }, padding: 16 }
         }
       }
+    }
+  });
+
+  // ── Confusion matrix (styled bar chart proxy) ────────
+  new Chart(document.getElementById("confusionMatrix"), {
+    type: "bar",
+    data: {
+      labels: ["True Negative", "False Positive", "False Negative", "True Positive"],
+      datasets: [{
+        data: [56856, 35, 14, 97],
+        backgroundColor: [
+          "rgba(34,197,94,.7)", "rgba(251,191,36,.7)",
+          "rgba(251,191,36,.7)", "rgba(34,197,94,.7)"
+        ],
+        borderColor: [
+          "rgba(34,197,94,1)", "rgba(251,191,36,1)",
+          "rgba(251,191,36,1)", "rgba(34,197,94,1)"
+        ],
+        borderWidth: 2,
+        borderRadius: 6,
+      }]
     },
-    scales: {
-      x: {
-        ticks: { color:"#94a3b8", font:{ family:"DM Sans", size:11 } },
-        grid:  { color:"rgba(16,43,86,.5)" }
+    options: {
+      responsive: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y.toLocaleString()} transactions`
+          }
+        }
       },
-      y: {
-        ticks: { color:"#94a3b8", font:{ family:"DM Sans", size:11 } },
-        grid:  { color:"rgba(16,43,86,.5)" }
+      scales: {
+        x: {
+          ticks: { color: "#94a3b8", font: { family: "DM Sans", size: 11 } },
+          grid: { color: "rgba(16,43,86,.5)" }
+        },
+        y: {
+          ticks: { color: "#94a3b8", font: { family: "DM Sans", size: 11 } },
+          grid: { color: "rgba(16,43,86,.5)" }
+        }
       }
     }
-  }
-});
+  });
 </script>
 {% endblock %}
